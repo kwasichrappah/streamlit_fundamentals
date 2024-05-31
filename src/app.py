@@ -6,6 +6,8 @@ st.header("Page1:Readme on what the app does")
 st.markdown("Page2: sample of the data used in creating the model")
 st.subheader("Page 3 : Predictor using the ML models created")
 st.caption("storage of all the predicted outcomes")
+x=st.text_input('Fovourite Movie?')
+st.write (f'Your movie is : {x}')
 st.code("x=2021")
 st.latex(r''' a+a r^1+a r^2+a r^3 ''')
 
