@@ -1,9 +1,22 @@
 import streamlit as st
+import pandas as pd
+import matplotlib as plt
 
-st.write("Hello,This is my first web app for a ML model")
-st.title ("Customer Churn Predictor")
-st.caption("storage of all the predicted outcomes")
-x=st.text_input('Fovourite Movie?')
-st.write (f'Your movie is : {x}')
-st.code("x=2021")
-st.latex(r''' a+a r^1+a r^2+a r^3 ''')
+
+
+st.title ("Data of Customers")
+st.subheader("This is a breakdown of customer attrition attributes")
+
+
+df = pd.DataFrame(columns=['name','age','color'])
+colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
+config = {
+    'name' : st.column_config.TextColumn('Full Name (required)', width='large', required=True),
+    'age' : st.column_config.NumberColumn('Age (years)', min_value=0, max_value=122),
+    'color' : st.column_config.SelectboxColumn('Favorite Color', options=colors)
+}
+
+result = st.data_editor(df, column_config = config, num_rows='dynamic')
+
+if st.button('Get results'):
+    st.write(result)
