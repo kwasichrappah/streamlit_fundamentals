@@ -69,6 +69,8 @@ st.dataframe(com_df.style.background_gradient(cmap='Blues'), height=600,width=60
 
 
 
+
+
 # categoricals = [column for column in com_df.columns if com_df[column].dtype == "O"]
 
 # #column = st.selectbox('Select feature to filter on', categoricals)
