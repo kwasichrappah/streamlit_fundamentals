@@ -41,7 +41,7 @@ csv_df = pd.read_csv("C:\\Users\\chrap\\OneDrive - ECG Ghana\\Emmanuel Chrappah\
 com_df=pd.concat([rows,csv_df],ignore_index=True)
 
 st.write("Sample Data")
-st.dataframe(com_df.style.background_gradient(cmap='Blues'), height=600,width=600
+st.dataframe(com_df.style.background_gradient(cmap='Blues'), height=600,width=600,use_container_width= True,hide_index=True
              
              
              
