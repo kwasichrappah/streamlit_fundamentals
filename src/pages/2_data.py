@@ -3,49 +3,62 @@ import pandas as pd
 import matplotlib as plt
 import pyodbc  
 import joblib
+import sys
 
 
-#Creation of Connection to Database
+if __name__ == "__main__":
+    # Streamlit page configuration
+    st.set_page_config(page_title="Model Prediction", page_icon="💾", layout="wide")
 
-@st.cache_resource(show_spinner = 'connecting to database...')
-def init_connection():
-    return pyodbc.connect(
-            "DRIVER={SQL Server};SERVER="
-            + st.secrets["server"]
-            + ";DATABASE="
-            + st.secrets["database"]
-            + ";UID="
-            + st.secrets["username"]
-            + ";PWD="
-            + st.secrets["password"]
-            
-       
-    )
 
-connection = init_connection()
+    #Creation of Connection to Database
 
-@st.cache_data(show_spinner = 'running query ...')
-def running_query(query):
-     with connection.cursor() as cursor:
-                            cursor.execute(query)
-                            rows = cursor.fetchall()
-                            df = pd.DataFrame.from_records(rows, columns = [column[0] for column in cursor.description])
+    @st.cache_resource(show_spinner = 'connecting to database...')
+    def init_connection():
+        return pyodbc.connect(
+                "DRIVER={SQL Server};SERVER="
+                + st.secrets["server"]
+                + ";DATABASE="
+                + st.secrets["database"]
+                + ";UID="
+                + st.secrets["username"]
+                + ";PWD="
+                + st.secrets["password"]
+                
+        
+        )
 
-     return df
+    connection = init_connection()
 
-query = "SELECT * FROM LP2_Telco_churn_first_3000"
+    @st.cache_data(show_spinner = 'running query ...')
+    def running_query(query):
+        with connection.cursor() as cursor:
+                                cursor.execute(query)
+                                rows = cursor.fetchall()
+                                df = pd.DataFrame.from_records(rows, columns = [column[0] for column in cursor.description])
 
-rows = running_query(query)
+        return df
 
-csv_df = pd.read_csv("C:\\Users\\chrap\\OneDrive - ECG Ghana\\Emmanuel Chrappah\\Azubi Africa\\git_hub_repos\\Custormer-Churn\\data\\LP2_Telco-churn-second-2000.csv")
-com_df=pd.concat([rows,csv_df],ignore_index=True)
+    query = "SELECT * FROM LP2_Telco_churn_first_3000"
 
-st.write("Sample Data")
-st.dataframe(com_df.style.background_gradient(cmap='Blues'), height=600,width=600,use_container_width= True,hide_index=True
-             
-             
-             
-             )
+    rows = running_query(query)
+
+    csv_df = pd.read_csv("C:\\Users\\chrap\\OneDrive - ECG Ghana\\Emmanuel Chrappah\\Azubi Africa\\git_hub_repos\\Custormer-Churn\\data\\LP2_Telco-churn-second-2000.csv")
+    com_df=pd.concat([rows,csv_df],ignore_index=True)
+
+    # Load the function from the file
+    cleaner = joblib.load('models\\cleaner_model.pkl')
+    #com_df=cleaner(com_df)
+
+
+    st.header("Collection of data from AirTigo Telecommunications")
+    with st.container(border = True,height = 650):
+        st.dataframe(com_df.style.background_gradient(cmap='Blues'), height=600,width=600,use_container_width= True,hide_index=True
+                
+                
+                
+                )
+    st.caption('Data was gathered from :blue[an SQL database and a CSV file]')
 
 
 
