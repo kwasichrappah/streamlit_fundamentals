@@ -4,11 +4,11 @@ import matplotlib as plt
 import pyodbc  
 import joblib
 import sys
-
+from jobs import cleaner
 
 if __name__ == "__main__":
     # Streamlit page configuration
-    st.set_page_config(page_title="Model Prediction", page_icon="💾", layout="wide")
+    st.set_page_config(page_title="Data", page_icon="💾", layout="wide")
 
 
     #Creation of Connection to Database
@@ -47,8 +47,8 @@ if __name__ == "__main__":
     com_df=pd.concat([rows,csv_df],ignore_index=True)
 
     # Load the function from the file
-    cleaner = joblib.load('models\\cleaner_model.pkl')
-    #com_df=cleaner(com_df)
+    cleaner = joblib.load('models\\cleaner1_model.joblib')
+    com_df=cleaner(com_df)
 
 
     st.header("Collection of data from AirTigo Telecommunications")
