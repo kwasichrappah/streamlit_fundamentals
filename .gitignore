@@ -1,6 +1,16 @@
 
 logins.env
+<<<<<<< HEAD
 errors/isaac2.png
 errors/isaac3.png
 errors/results.png
+=======
+errors/results.png
+errors/isaac3.png
+errors/isaac2.png
+>>>>>>> 61d6f4f3262a2f54bc8f925c0d020e44cfe2d440
 errors/isaac_1.png
+errors/function_saved_with_joblib.png
+errors/function_saved_with_joblib.png
+errors/function_saved_with_joblib.png
+errors/function_saved_with_joblib.png
