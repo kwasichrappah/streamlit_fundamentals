@@ -4,7 +4,8 @@ import matplotlib as plt
 import pyodbc  
 import joblib
 import sys
-from jobs import cleaner
+import numpy as np
+
 
 if __name__ == "__main__":
     # Streamlit page configuration
@@ -30,6 +31,8 @@ if __name__ == "__main__":
 
     connection = init_connection()
 
+
+
     @st.cache_data(show_spinner = 'running query ...')
     def running_query(query):
         with connection.cursor() as cursor:
@@ -47,13 +50,45 @@ if __name__ == "__main__":
     com_df=pd.concat([rows,csv_df],ignore_index=True)
 
     # Load the function from the file
-    cleaner = joblib.load('models\\cleaner1_model.joblib')
-    com_df=cleaner(com_df)
+    com_df['TotalCharges'] = pd.to_numeric(com_df['TotalCharges'], errors='coerce')
+    com_df=com_df.reset_index()
+        #Dropping the index column
+    com_df = com_df.drop(['index'], axis = 1 )
+    com_df.replace(['No','No internet service','false','No phone service'], "False", inplace = True)
+
+    com_df.replace('Yes',"True", inplace = True)
+    com_df['SeniorCitizen'] = np.where(com_df['SeniorCitizen'] == 1, True, False)
+    com_df['InternetService']=com_df.InternetService.replace('false','None')
+    com_df.replace(['No','No internet service','false','No phone service'], "False", inplace = True)
+    com_df.replace('Yes',"True", inplace = True)
+    com_df['SeniorCitizen'] = np.where(com_df['SeniorCitizen'] == 1, True, False)
+    com_df.InternetService.replace('false','None')
+    com_df.replace({'True': True, 'False': False}, inplace = True)
+
 
 
     st.header("Collection of data from AirTigo Telecommunications")
+
+    col1, col2 = st.columns(2)
+    with col2:
+        option = st.selectbox('Select interested category...', options=["All", "Numerical", "Categorical","Boolean"])
+
+    cat = com_df.select_dtypes(include='object').columns.tolist()
+    num = com_df.select_dtypes(include='number').columns.tolist()
+    bool = com_df.select_dtypes(include='bool').columns.tolist()
+
+    if option == 'Categorical':
+        filtered_df = com_df[cat]
+    elif option == 'Numerical':
+              filtered_df = com_df[num]
+    elif option == 'Boolean':
+            filtered_df = com_df[bool]          
+    else:
+            filtered_df = com_df
+
+
     with st.container(border = True,height = 650):
-        st.dataframe(com_df.style.background_gradient(cmap='Blues'), height=600,width=600,use_container_width= True,hide_index=True
+        st.dataframe(filtered_df.style.background_gradient(cmap='Blues'), height=600,width=600,use_container_width= True,hide_index=True
                 
                 
                 
