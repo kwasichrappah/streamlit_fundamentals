@@ -1,11 +1,51 @@
 import streamlit as st
 import pandas as pd
-import matplotlib as plt
+import joblib
+import os
+import datetime
+
+st.set_page_config(
+    page_title= "Predict Page",
+    page_icon=" ",
+    layout='wide'
+)
+
+st.cache_resource(show_spinner="Models Loading")
+def load_catboost_pipeline():
+    pipeline = joblib.load("./models\tuned\best_catboost_pred.joblib")
+    return pipeline
+
+st.cache_resource(show_spinner="Models Loading")
+def load_xgboost_pipeline():
+    pipeline = joblib.load("./models\tuned\best_gs_pred.joblib")
+    return pipeline
+
+st.cache_resource(show_spinner="Models Loading")
+def load_svc_pipeline():
+    pipeline = joblib.load("./models\tuned\best_svc_pred.joblib")
+    return pipeline
+
+def select_model():
+        col1,col2 = st.columns(2)
+
+        with col2:
+             st.selectbox('Select a Model', options = ['CatBoost','XGBoost','SVC'])
 
 
 
-st.title ("Data of Customers")
-st.subheader("This is a breakdown of customer attrition attributes")
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 df = pd.DataFrame(columns=['name','age','color'])
