@@ -37,8 +37,8 @@ def load_catboost_pipeline():
     return pipeline
 
 st.cache_resource(show_spinner="Models Loading")
-def load_xgboost_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_gs_pred.joblib")
+def load_logistic_regressor_pipeline():
+    pipeline = joblib.load(".\\models\\tuned\\best_search_pred.joblib")
     return pipeline
 
 st.cache_resource(show_spinner="Models Loading")
@@ -46,15 +46,23 @@ def load_svc_pipeline():
     pipeline = joblib.load(".\\models\\tuned\\best_svc_pred.joblib")
     return pipeline
 
+st.cache_resource(show_spinner="Models Loading")
+def load_xgboost_pipeline():
+    pipeline = joblib.load(".\\models\\tuned\\best_gs_pred .joblib")
+    return pipeline
+
 def select_model():
         col1,col2 = st.columns(2)
 
         with col2:
-             st.selectbox('Select a Model', options = ['CatBoost','XGBoost','SVC'],key='selected_model')
+             st.selectbox('Select a Model', options = ['CatBoost','Logistic Regressor','XGBoost','SVC'],key='selected_model')
 
         if st.session_state['selected_model'] == 'CatBoost':
              pipeline = load_catboost_pipeline()
         
+        if st.session_state['selected_model'] == 'Logistic Regressor':
+             pipeline = load_logistic_regressor_pipeline()
+
         if st.session_state['selected_model'] == 'XGBoost':
              pipeline = load_xgboost_pipeline()
         else:
@@ -103,8 +111,9 @@ def make_prediction(pipeline):
      df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
 
      #Make prediction
-     pred = pipeline.predict(df)
-     prediction = int(pred[0])
+     pred=pipeline.predict(df)
+    #  pred = pipeline.predict(df)
+    #  prediction = int(pred[0])
      ##prediction = encoder.inverse_transform([pred])
 
      #Get probability
@@ -114,7 +123,7 @@ def make_prediction(pipeline):
      st.session_state['prediction'] = prediction
      st.session_state['probability'] = probability
 
-     return prediction,probability
+     return pred,probability
 def display_form():
      pipeline = select_model()
 
