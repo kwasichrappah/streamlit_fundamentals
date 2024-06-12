@@ -3,6 +3,27 @@ import pandas as pd
 import joblib
 import os
 import datetime
+import numpy as np
+from sklearn.model_selection import * #train_test_split, cross_val_score
+
+from sklearn.preprocessing import StandardScaler
+from sklearn.pipeline import Pipeline
+from sklearn.compose import ColumnTransformer
+from sklearn.utils import resample
+from sklearn.impute import SimpleImputer
+from sklearn.linear_model import LogisticRegression
+from sklearn.svm import SVC 
+from catboost import CatBoostClassifier
+import xgboost as xgb
+from xgboost import XGBClassifier
+#for balancing dataset
+from imblearn.over_sampling import SMOTE
+from imblearn.pipeline import Pipeline as imbpipeline
+#for feature selection
+from sklearn.feature_selection import mutual_info_classif,SelectKBest
+#Crossvalidation for hyper parameter tuning
+from sklearn.model_selection import GridSearchCV
+
 
 st.set_page_config(
     page_title= "Predict Page",
@@ -49,52 +70,84 @@ if 'probability' not in st.session_state:
      st.session_state['probability']= None
 
 def make_prediction(pipeline):
-     age = st.session_state['age']
-     distancefromhome = st.session_state['distancefromhome']
-     department = st.session_state['department']
-     education = st.session_state['education']
-     educational_field = st.session_state['educationalfield']
-     environmental_satisfaction = st.session_state['environmental_satisfaction']
-     job_satisfaction = st.session_state['job_satisfaction']
-     marital_status = st.session_state['marital_status']
-     monthly_income = st.session_state['monthly_income']
-     numofcompaniesworked = st.session_state['numofcompaniesworked']
-     worklifebalance = st.session_state['worklifebalance']
-     yearsatcompany = st.session_state['yearsatcompany']
+     seniorcitizen = st.session_state['seniorcitizen']
+     partner = st.session_state['partner']
+     dependents = st.session_state['dependents']
+     phoneservice = st.session_state['phoneservice']
+     multiplelines = st.session_state['multiplelines']
+     internetservice = st.session_state['internetservice']
+     onlinesecurity = st.session_state['onlinesecurity']
+     onlinebackup = st.session_state['onlinebackup']
+     deviceprotetion = st.session_state['deviceprotection']
+     techsupport = st.session_state['techsupport']
+     streamingtv = st.session_state['streamingtv']
+     streamingmovies = st.session_state['streamingmovies']
+     contract = st.session_state['contract']
+     paperlessbilling = st.session_state['paperlessbilling']
+     tenure = st.session_state['tenure']
+     monthlycharges = st.session_state['monthlycharges']
+     totalcharges = st.session_state['totalcharges']
 
-     columns =['Age','Department','Distancefromhome','Education','EducationField',
-               'EnvironmentSatisfaction','JobSatisfaction','MaritalStatus','MonthlyIncome','NumCompaniesWorkedat',
-               'WorklifeBalance','YearsAtCompany']
-     data = [[age,department,distancefromhome,education,educational_field,
-              environmental_satisfaction,job_satisfaction,marital_status,monthly_income,
-              numofcompaniesworked,worklifebalance,yearsatcompany]]
+     columns =['seniorcitizen','partner','dependents','phoneservice','multiplelines',
+              'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
+              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','monthlycharges','tenure','totalcharges']
+     data = [[seniorcitizen,partner,dependents,phoneservice,multiplelines,
+              internetservice,onlinesecurity,onlinebackup,deviceprotetion,
+              techsupport,streamingtv,streamingmovies,contract,paperlessbilling,monthlycharges,tenure,totalcharges]]
+     #create dataframe
+     df = pd.DataFrame(data,columns=columns)
 
+     df['PredictionTime'] = datetime.date.today()
+     df['Model_used'] = st.session_state['selected_model']
+
+     df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
+
+     #Make prediction
+     pred = pipeline.predict(df)
+     prediction = int(pred[0])
+     ##prediction = encoder.inverse_transform([pred])
+
+     #Get probability
+     probability = pipeline.predict_proba(pred)
+
+     #Updating state
+     st.session_state['prediction'] = prediction
+     st.session_state['probability'] = probability
+
+     return prediction,probability
 def display_form():
      pipeline = select_model()
 
      with st.form('input-feaatures'):
-          col1,col2,col3 = st.columns(3)
+          col1,col2 = st.columns(2)
 
           with col1:
                st.write ('### Personal Information')
-               st.number_input('Enter your age',min_value=18,max_value=60,step=1,key='age')
-               st.number_input('Distance from Home',min_value=10,step=1,key='distancefromhome')
-               st.number_input('Monthly Income',min_value=2000,max_value=1000000,step=100,key='monthly_income')
-               st.selectbox('Marital Status',['Single','Married','Divorced'],key='marital_status')
+               st.selectbox('Senior Citizen',['Yes','No'],key='seniorcitizen')
+               st.selectbox('Gender',['Male','Female'],key='gender')
+               st.selectbox('Dependents',['Yes','No'],key='dependents')
+               st.selectbox('Partner',['Yes','No'],key='partner')
+               st.selectbox('Phone Service',['Yes','No'],key='phoneservice')
+               st.selectbox('Multiple Lines',['Yes','No'],key='multiplelines')
+               st.selectbox('Internet Service',['Fiber Optic','DSL','No'],key='internetservice')
+
 
           with col2:
                st.write('### Work Information')
-               st.selectbox('Enter Department',options=['Sales','Research & Development','Human Resources'],key='department')
-               st.selectbox('Enter Educational Field',options=['Life Sciences','Other','Medical','Marketing','Technical Degree','Human Resources'], key='educationalfield')
-               st.number_input('Educational Field',min_value=1,max_value=5,step=1,key='education')
-               st.number_input('Years at Company',min_value=1,max_value=60,step=1,key='yearsatcompany')
+               st.selectbox('Online Security',['Yes','No'],key='onlinesecurity')
+               st.selectbox('Online Backup',['Yes','No'],key='onlinebackup')
+               st.selectbox('Device Protection',['Yes','No'],key='deviceprotection')
+               st.selectbox('Tech Support',['Yes','No'],key='techsupport')
+               st.selectbox('Streaming TV',['Yes','No'],key='streamingtv')
+               st.selectbox('Streaming Movies',['Yes','No'],key='streamingmovies')
+               st.selectbox('Contract Type',['Month-to-month','One year','Two year'],key='contract')
+               st.selectbox('Paperless Billing',['Yes','No'],key='paperlessbilling')
+               st.number_input('Enter your monthly charge', key='monthlycharges', min_value=10, max_value=200, step=1)
+               st.number_input('Enter Tenure in months', key = 'tenure', min_value=0, max_value=72, step=1)
+               st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
 
-          with col3:
-               st.write('### Satisfaction')
-               st.number_input('Job Satisfaction',min_value=1,max_value=4,step=1,key='job_satisfaction')
-               st.number_input('Environment Satisfaction',min_value=1,max_value=4,step=1,key='environmental_satisfaction')
-               st.number_input('Work-Life Balance',min_value=1,max_value=4,step=1,key='worklifebalance')
-               st.number_input('Number of Companies worked at',min_value=1,max_value=6,step=1,key='numofcompaniesworked')
+            
+
 
           st.form_submit_button('Predict',on_click=make_prediction,kwargs= dict(pipeline = pipeline))
 
