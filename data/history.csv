@@ -1,41 +1,6 @@
-seniorcitizen,partner,gender,dependents,phoneservice,multiplelines,internetservice,onlinesecurity,onlinebackup,deviceprotetion,techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure,totalcharges,PredictionTime,Model_used
-Yes,Yes,Male,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,10,2024-06-13,CatBoost
-Yes,Yes,Male,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,10,2024-06-13,CatBoost
-Yes,Yes,Male,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,10,2024-06-13,CatBoost
-Yes,Yes,Male,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,10,2024-06-13,CatBoost
-Yes,Yes,Male,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,10,2024-06-13,CatBoost
-Yes,Yes,Male,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,10,2024-06-13,SVC
-Yes,Yes,Male,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,10,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,10,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,14,17,2024-06-13,Logistic Regressor
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,7,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-No,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,No,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,No,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-No,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,No,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-No,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-No,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,DSL,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,0,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,No,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2,2024-06-13,CatBoost
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2,2024-06-13,Logistic Regressor
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2
-0,0,0,0,0,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2
-0,0,0,0,0,0,0,0,0,0,0,0,Month-to-month,0,Electronic Check,10,2
-0,0,0,0,0,0,0,0,0,0,0,0,Month-to-month,0,0,10,2
-0,0,0,0,0,0,0,0,0,0,0,0,Month-to-month,0,0,10,2
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2
-Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2
+SeniorCitizen,Partner,Dependents,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,tenure,PredictionTime,Model_used,prediction
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,One year,Yes,Bank transfer,10,2,2024-06-13,CatBoost,
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Two year,Yes,Bank transfer,10,2,2024-06-13,SVC,0
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Two year,Yes,Bank transfer,25,20,2024-06-13,SVC,0
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2,2024-06-13,CatBoost,
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,6,2024-06-13,CatBoost,0

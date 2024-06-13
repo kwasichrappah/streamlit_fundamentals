@@ -15,30 +15,31 @@ st.set_page_config(
 #Loading the models into streamlit app
 st.cache_resource(show_spinner="Models Loading")
 def load_catboost_pipeline():
-    pipeline = joblib.load("models\\tuned\\best_gs_pred .joblib")
+    pipeline = joblib.load("models\\tuned\\catboost_pred.joblib")
     st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_logistic_regressor_pipeline():
-    pipeline = joblib.load('./models/Logistic_Regressor.joblib')#("./models/tuned/best_search_pred.joblib")
+    pipeline = joblib.load('./models/tuned/log_reg_pred.joblib')#("./models/tuned/best_search_pred.joblib")
     st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_svc_pipeline():
-    pipeline = joblib.load('./models/SVM.joblib')#("./models/tuned/best_svc_pred.joblib")
+    pipeline = joblib.load('./models/tuned/svc_pred.joblib')#("./models/tuned/best_svc_pred.joblib")
     st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
-    pipeline = joblib.load('./models/Xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
+    pipeline = joblib.load('./models/tuned/xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
     st.write(pipeline)
     return pipeline
+
 
 #Selecting model for prediction
 def select_model():
@@ -76,51 +77,53 @@ def make_prediction(pipeline,encoder):
      partner = st.session_state['Partner']
      #gender  = st.session_state['gender'] Not included in my model for prediction
      dependents = st.session_state['Dependents']
-     phoneservice = st.session_state['PhoneService']
+     PhoneService = st.session_state['PhoneService']
      multiplelines = st.session_state['MultipleLines']
      InternetService = st.session_state['InternetService']
      onlinesecurity = st.session_state['OnlineSecurity']
      onlinebackup = st.session_state['OnlineBackup']
-     deviceprotetion = st.session_state['DeviceProtection']
-     techsupport = st.session_state['TechSupport']
-     streamingtv = st.session_state['StreamingTV']
-     streamingmovies = st.session_state['StreamingMovies']
-     contract = st.session_state['Contract']
+     DeviceProtection = st.session_state['DeviceProtection']
+     TechSupport = st.session_state['TechSupport']
+     StreamingTV = st.session_state['StreamingTV']
+     StreamingMovies = st.session_state['StreamingMovies']
+     Contract = st.session_state['Contract']
      paperlessbilling = st.session_state['PaperlessBilling']
      tenure = st.session_state['tenure']
      monthlycharges = st.session_state['MonthlyCharges']
      #totalcharges = st.session_state['totalcharges'] #Not included in my model for prediction
      paymentmethod = st.session_state['PaymentMethod']
 
-     columns = ['seniorcitizen','partner','dependents','phoneservice','multiplelines',
-              'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
-              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure']
+     columns = ['SeniorCitizen','Partner','Dependents','PhoneService','MultipleLines',
+              'InternetService','OnlineSecurity','OnlineBackup','DeviceProtection',
+              'TechSupport','StreamingTV','StreamingMovies','Contract','PaperlessBilling','PaymentMethod','MonthlyCharges','tenure']
      
-     data = [[SeniorCitizen,Partner,Dependents,Phoneservice,MultipleLines,
-              InternetService,onlinesecurity,onlinebackup,deviceprotetion,
-              techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure]]
+     data = [[SeniorCitizen,partner,dependents,PhoneService,multiplelines,
+              InternetService,onlinesecurity,onlinebackup,DeviceProtection,
+              TechSupport,StreamingTV,StreamingMovies,Contract,paperlessbilling,paymentmethod,monthlycharges,tenure]]
      #create dataframe
      df = pd.DataFrame(data,columns=columns)
 
-     #df['PredictionTime'] = datetime.date.today()
-     #df['Model_used'] = st.session_state['selected_model']
+     df['PredictionTime'] = datetime.date.today()
+     df['Model_used'] = st.session_state['selected_model']
+     df['prediction'] = st.session_state['prediction']
 
      df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
 
      #Make prediction
      
      pred = pipeline.predict(df)
-     pred = int(pred[0])
-     prediction = encoder.inverse_transform(pred)
+     prediction = int(pred[0])
+     #prediction = encoder.inverse_transform(pred)
 
      #Get probability
      #probability = pipeline.predict_proba(pred)
 
      #Updating state
-     st.session_state['prediction'] = pred
+     st.session_state['prediction'] = prediction
+     
      #st.session_state['probability'] = probability
 
-     return prediction#,probability
+     return prediction
 
 #Display form on the streamlit app to take user
 def display_form():
@@ -138,6 +141,8 @@ def display_form():
                st.selectbox('Phone Service',['Yes','No'],key='PhoneService')
                st.selectbox('Multiple Lines',['Yes','No'],key='MultipleLines')
                st.selectbox('Internet Service',['Fiber Optic','DSL'],key='InternetService')
+               st.number_input('Enter your monthly charge', key='MonthlyCharges', min_value=10, max_value=200, step=1)
+               st.number_input('Enter Tenure in months', key = 'tenure', min_value=2, max_value=72, step=1)
 
 
           with col2:
@@ -152,9 +157,8 @@ def display_form():
                st.selectbox('Paperless Billing',['Yes','No'],key='PaperlessBilling')
                st.selectbox('What is your payment method', options=['Electronic Check','Mailed check', 'Bank transfer', 'Credit Card']
                             ,key='PaymentMethod')
-               st.number_input('Enter your monthly charge', key='MonthlyCharges', min_value=10, max_value=200, step=1)
-               st.number_input('Enter Tenure in months', key = 'tenure', min_value=2, max_value=72, step=1)
-               #st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
+               
+               st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
 
 
           st.form_submit_button('Predict',on_click = make_prediction,kwargs = dict(pipeline = pipeline,encoder=encoder))
@@ -163,6 +167,10 @@ def display_form():
 if __name__ == '__main__':
      st.title("Make a Prediction")
      display_form()
-     st.write(st.session_state)
-
+     prediction = st.session_state['prediction']
+     st.markdown('### Predictions will show here')
+     if prediction == 0:
+          st.write("The customer will not churn")
+     else:
+          st.write('The customer will churn')
      
