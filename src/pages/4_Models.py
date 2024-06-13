@@ -120,7 +120,7 @@ def make_prediction(pipeline,encoder):
 
      return prediction#,probability
 
-#Display form on the streamlit app to take user input
+#Display form on the streamlit app to take user
 def display_form():
      pipeline,encoder = select_model()
 
@@ -151,7 +151,7 @@ def display_form():
                st.selectbox('What is your payment method', options=['Electronic Check','Mailed check', 'Bank transfer', 'Credit Card']
                             ,key='PaymentMethod')
                st.number_input('Enter your monthly charge', key='MonthlyCharges', min_value=10, max_value=200, step=1)
-               st.number_input('Enter Tenure in months', key = 'tenure', min_value=0, max_value=72, step=1)
+               st.number_input('Enter Tenure in months', key = 'tenure', min_value=2, max_value=72, step=1)
                #st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
 
 
