@@ -15,6 +15,7 @@ st.set_page_config(
 st.cache_resource(show_spinner="Models Loading")
 def load_catboost_pipeline():
     pipeline = joblib.load('./models/CatBoost.joblib')#("./models/tuned/best_catboost_pred.joblib")
+    print(pipeline)
     return pipeline
 
 
@@ -33,6 +34,7 @@ def load_svc_pipeline():
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
     pipeline = joblib.load('./models/Xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
+    print(pipeline)
     return pipeline
 
 
@@ -65,7 +67,7 @@ if 'probability' not in st.session_state:
 def make_prediction(pipeline,encoder):
      seniorcitizen = st.session_state['seniorcitizen']
      partner = st.session_state['partner']
-     gender  = st.session_state['gender']
+     #gender  = st.session_state['gender']
      dependents = st.session_state['dependents']
      phoneservice = st.session_state['phoneservice']
      multiplelines = st.session_state['multiplelines']
@@ -80,16 +82,16 @@ def make_prediction(pipeline,encoder):
      paperlessbilling = st.session_state['paperlessbilling']
      tenure = st.session_state['tenure']
      monthlycharges = st.session_state['monthlycharges']
-     totalcharges = st.session_state['totalcharges']
+     #totalcharges = st.session_state['totalcharges']
      paymentmethod = st.session_state['paymentmethod']
 
-     columns = ['seniorcitizen','partner','gender','dependents','phoneservice','multiplelines',
+     columns = ['seniorcitizen','partner','dependents','phoneservice','multiplelines',
               'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
-              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure','totalcharges']
+              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure']
      
-     data = [[seniorcitizen,partner,gender,dependents,phoneservice,multiplelines,
+     data = [[seniorcitizen,partner,dependents,phoneservice,multiplelines,
               internetservice,onlinesecurity,onlinebackup,deviceprotetion,
-              techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure,totalcharges]]
+              techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure]]
      #create dataframe
      df = pd.DataFrame(data,columns=columns)
 
@@ -99,31 +101,31 @@ def make_prediction(pipeline,encoder):
      df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
 
      #Make prediction
-     print((pipeline))
+     
      pred = pipeline.predict(df)
      pred= int(pred[0])
-     prediction = encoder.inverse_transform([pred])
+     prediction = encoder.inverse_transform(pred)
 
      #Get probability
-     probability = pipeline.predict_proba(pred)
+     #probability = pipeline.predict_proba(pred)
 
      #Updating state
-     st.session_state['prediction'] = prediction
-     st.session_state['probability'] = probability
+     st.session_state['prediction'] = pred
+     #st.session_state['probability'] = probability
 
-     return prediction,probability
+     return prediction#,probability
 
 
 def display_form():
      pipeline,encoder = select_model()
 
-     with st.form('input-feaatures'):
+     with st.form('input-features'):
           col1,col2 = st.columns(2)
 
           with col1:
                st.write ('### Personal Information')
                st.selectbox('Senior Citizen',['Yes','No'],key='seniorcitizen')
-               st.selectbox('Gender',['Male','Female'],key='gender')
+               #st.selectbox('Gender',['Male','Female'],key='gender')
                st.selectbox('Dependents',['Yes','No'],key='dependents')
                st.selectbox('Partner',['Yes','No'],key='partner')
                st.selectbox('Phone Service',['Yes','No'],key='phoneservice')
@@ -145,7 +147,7 @@ def display_form():
                             ,key='paymentmethod')
                st.number_input('Enter your monthly charge', key='monthlycharges', min_value=10, max_value=200, step=1)
                st.number_input('Enter Tenure in months', key = 'tenure', min_value=0, max_value=72, step=1)
-               st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
+               #st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
 
 
           st.form_submit_button('Predict',on_click = make_prediction,kwargs = dict(pipeline = pipeline,encoder=encoder))
