@@ -154,6 +154,7 @@ def display_form():
 if __name__ == '__main__':
      st.title("Make a Prediction")
      display_form()
+     #
      st.write(st.session_state)
 
      
