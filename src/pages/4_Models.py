@@ -3,26 +3,7 @@ import pandas as pd
 import joblib
 import os
 import datetime
-import numpy as np
-from sklearn.model_selection import * #train_test_split, cross_val_score
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.utils import resample
-from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC 
-from catboost import CatBoostClassifier
-import xgboost as xgb
-from xgboost import XGBClassifier
-#for balancing dataset
-from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline as imbpipeline
-#for feature selection
-from sklearn.feature_selection import mutual_info_classif,SelectKBest
-#Crossvalidation for hyper parameter tuning
-from sklearn.model_selection import GridSearchCV
 
 
 st.set_page_config(
@@ -48,8 +29,9 @@ def load_svc_pipeline():
 
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_gs_pred .joblib")
+    pipeline = joblib.load(".\\models\\tuned\\best_gs_pred.joblib")
     return pipeline
+
 
 def select_model():
         col1,col2 = st.columns(2)
@@ -72,58 +54,63 @@ def select_model():
 
         return pipeline
 
+
 if 'prediction' not in st.session_state:
      st.session_state['prediction']= None
 if 'probability' not in st.session_state:
      st.session_state['probability']= None
 
+
 def make_prediction(pipeline):
-     seniorcitizen = st.session_state['seniorcitizen']
-     partner = st.session_state['partner']
-     dependents = st.session_state['dependents']
-     phoneservice = st.session_state['phoneservice']
-     multiplelines = st.session_state['multiplelines']
-     internetservice = st.session_state['internetservice']
-     onlinesecurity = st.session_state['onlinesecurity']
-     onlinebackup = st.session_state['onlinebackup']
-     deviceprotetion = st.session_state['deviceprotection']
-     techsupport = st.session_state['techsupport']
-     streamingtv = st.session_state['streamingtv']
-     streamingmovies = st.session_state['streamingmovies']
-     contract = st.session_state['contract']
-     paperlessbilling = st.session_state['paperlessbilling']
-     tenure = st.session_state['tenure']
-     monthlycharges = st.session_state['monthlycharges']
-     totalcharges = st.session_state['totalcharges']
+    seniorcitizen = st.session_state['seniorcitizen']
+    partner = st.session_state['partner']
+    dependents = st.session_state['dependents']
+    phoneservice = st.session_state['phoneservice']
+    multiplelines = st.session_state['multiplelines']
+    internetservice = st.session_state['internetservice']
+    onlinesecurity = st.session_state['onlinesecurity']
+    onlinebackup = st.session_state['onlinebackup']
+    deviceprotetion = st.session_state['deviceprotection']
+    techsupport = st.session_state['techsupport']
+    streamingtv = st.session_state['streamingtv']
+    streamingmovies = st.session_state['streamingmovies']
+    contract = st.session_state['contract']
+    paperlessbilling = st.session_state['paperlessbilling']
+    tenure = st.session_state['tenure']
+    monthlycharges = st.session_state['monthlycharges']
+    totalcharges = st.session_state['totalcharges']
 
-     columns =['seniorcitizen','partner','dependents','phoneservice','multiplelines',
-              'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
-              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','monthlycharges','tenure','totalcharges']
-     data = [[seniorcitizen,partner,dependents,phoneservice,multiplelines,
-              internetservice,onlinesecurity,onlinebackup,deviceprotetion,
-              techsupport,streamingtv,streamingmovies,contract,paperlessbilling,monthlycharges,tenure,totalcharges]]
-     #create dataframe
-     df = pd.DataFrame(data,columns=columns)
+    columns =['seniorcitizen','partner','dependents','phoneservice','multiplelines',
+            'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
+            'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','monthlycharges','tenure','totalcharges']
+    data = [[seniorcitizen,partner,dependents,phoneservice,multiplelines,
+            internetservice,onlinesecurity,onlinebackup,deviceprotetion,
+            techsupport,streamingtv,streamingmovies,contract,paperlessbilling,monthlycharges,tenure,totalcharges]]
+    #create dataframe
+    df = pd.DataFrame(data,columns=columns)
 
-     df['PredictionTime'] = datetime.date.today()
-     df['Model_used'] = st.session_state['selected_model']
+    df['PredictionTime'] = datetime.date.today()
+    df['Model_used'] = st.session_state['selected_model']
 
-     df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
+    df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
 
      #Make prediction
-     pred=pipeline.predict(df)
+    pred = pipeline.predict(df)
+    pred = int(pred[0])
     #  pred = pipeline.predict(df)
     #  prediction = int(pred[0])
      ##prediction = encoder.inverse_transform([pred])
 
      #Get probability
-     probability = pipeline.predict_proba(pred)
+    probability = pipeline.predict_proba(pred)
 
      #Updating state
-     st.session_state['prediction'] = prediction
-     st.session_state['probability'] = probability
+    st.session_state['prediction'] = pred
+    st.session_state['probability'] = probability
 
-     return pred,probability
+    return pred,probability
+
+
 def display_form():
      pipeline = select_model()
 
@@ -131,7 +118,7 @@ def display_form():
           col1,col2 = st.columns(2)
 
           with col1:
-               st.write ('### Personal Information')
+               st.write ('### Information 1')
                st.selectbox('Senior Citizen',['Yes','No'],key='seniorcitizen')
                st.selectbox('Gender',['Male','Female'],key='gender')
                st.selectbox('Dependents',['Yes','No'],key='dependents')
@@ -142,7 +129,7 @@ def display_form():
 
 
           with col2:
-               st.write('### Work Information')
+               st.write('### Information 2')
                st.selectbox('Online Security',['Yes','No'],key='onlinesecurity')
                st.selectbox('Online Backup',['Yes','No'],key='onlinebackup')
                st.selectbox('Device Protection',['Yes','No'],key='deviceprotection')
@@ -155,10 +142,17 @@ def display_form():
                st.number_input('Enter Tenure in months', key = 'tenure', min_value=0, max_value=72, step=1)
                st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
 
-            
 
 
-          st.form_submit_button('Predict',on_click=make_prediction,kwargs= dict(pipeline = pipeline))
+          st.form_submit_button('Predict', on_click=make_prediction, kwargs=dict(pipeline=pipeline))
+
+
+def load_catboost_pipeline():
+    pipeline = joblib.load("./models/CatBoost.joblib")
+    return pipeline
+cat_boost = load_catboost_pipeline()
+print(cat_boost)
+
 
 
 if __name__ == '__main__':
@@ -167,3 +161,5 @@ if __name__ == '__main__':
 
      prediction = st.session_state['prediction']
      probability = st.session_state['probability']
+
+     
