@@ -62,6 +62,7 @@ if 'probability' not in st.session_state:
 
 
 def make_prediction(pipeline):
+<<<<<<< HEAD
     seniorcitizen = st.session_state['seniorcitizen']
     partner = st.session_state['partner']
     dependents = st.session_state['dependents']
@@ -88,6 +89,36 @@ def make_prediction(pipeline):
             techsupport,streamingtv,streamingmovies,contract,paperlessbilling,monthlycharges,tenure,totalcharges]]
     #create dataframe
     df = pd.DataFrame(data,columns=columns)
+=======
+     seniorcitizen = st.session_state['seniorcitizen']
+     partner = st.session_state['partner']
+     gender  = st.session_state['gender']
+     dependents = st.session_state['dependents']
+     phoneservice = st.session_state['phoneservice']
+     multiplelines = st.session_state['multiplelines']
+     internetservice = st.session_state['internetservice']
+     onlinesecurity = st.session_state['onlinesecurity']
+     onlinebackup = st.session_state['onlinebackup']
+     deviceprotetion = st.session_state['deviceprotection']
+     techsupport = st.session_state['techsupport']
+     streamingtv = st.session_state['streamingtv']
+     streamingmovies = st.session_state['streamingmovies']
+     contract = st.session_state['contract']
+     paperlessbilling = st.session_state['paperlessbilling']
+     tenure = st.session_state['tenure']
+     monthlycharges = st.session_state['monthlycharges']
+     totalcharges = st.session_state['totalcharges']
+     paymentmethod = st.session_state['paymentmethod']
+
+     columns =['seniorcitizen','partner','gender','dependents','phoneservice','multiplelines',
+              'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
+              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure','totalcharges']
+     data = [[seniorcitizen,partner,gender,dependents,phoneservice,multiplelines,
+              internetservice,onlinesecurity,onlinebackup,deviceprotetion,
+              techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure,totalcharges]]
+     #create dataframe
+     df = pd.DataFrame(data,columns=columns)
+>>>>>>> 0220b2e4c12b9bff41c72638cadce6baa1b03747
 
     df['PredictionTime'] = datetime.date.today()
     df['Model_used'] = st.session_state['selected_model']
@@ -95,10 +126,16 @@ def make_prediction(pipeline):
     df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
 
      #Make prediction
+<<<<<<< HEAD
     pred = pipeline.predict(df)
     pred = int(pred[0])
     #  pred = pipeline.predict(df)
     #  prediction = int(pred[0])
+=======
+     print((pipeline))
+     pred = pipeline.predict(df)
+     prediction = int(pred[0])
+>>>>>>> 0220b2e4c12b9bff41c72638cadce6baa1b03747
      ##prediction = encoder.inverse_transform([pred])
 
      #Get probability
@@ -111,6 +148,10 @@ def make_prediction(pipeline):
     return pred,probability
 
 
+<<<<<<< HEAD
+=======
+     return prediction,probability
+>>>>>>> 0220b2e4c12b9bff41c72638cadce6baa1b03747
 def display_form():
      pipeline = select_model()
 
@@ -138,12 +179,15 @@ def display_form():
                st.selectbox('Streaming Movies',['Yes','No'],key='streamingmovies')
                st.selectbox('Contract Type',['Month-to-month','One year','Two year'],key='contract')
                st.selectbox('Paperless Billing',['Yes','No'],key='paperlessbilling')
+               st.selectbox('What is your payment method', options=['Electronic Check','Mailed check', 'Bank transfer', 'Credit Card']
+                            ,key='paymentmethod')
                st.number_input('Enter your monthly charge', key='monthlycharges', min_value=10, max_value=200, step=1)
                st.number_input('Enter Tenure in months', key = 'tenure', min_value=0, max_value=72, step=1)
                st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
 
 
 
+<<<<<<< HEAD
           st.form_submit_button('Predict', on_click=make_prediction, kwargs=dict(pipeline=pipeline))
 
 
@@ -153,13 +197,21 @@ def load_catboost_pipeline():
 cat_boost = load_catboost_pipeline()
 print(cat_boost)
 
+=======
+          st.form_submit_button('Predict',on_click = make_prediction,kwargs = dict(pipeline = pipeline))
+>>>>>>> 0220b2e4c12b9bff41c72638cadce6baa1b03747
 
 
 if __name__ == '__main__':
      st.title("Make a Prediction")
      display_form()
+     st.write(st.session_state)
 
+<<<<<<< HEAD
      prediction = st.session_state['prediction']
      probability = st.session_state['probability']
 
      
+=======
+     
+>>>>>>> 0220b2e4c12b9bff41c72638cadce6baa1b03747
