@@ -3,26 +3,7 @@ import pandas as pd
 import joblib
 import os
 import datetime
-import numpy as np
-from sklearn.model_selection import * #train_test_split, cross_val_score
 
-from sklearn.preprocessing import StandardScaler
-from sklearn.pipeline import Pipeline
-from sklearn.compose import ColumnTransformer
-from sklearn.utils import resample
-from sklearn.impute import SimpleImputer
-from sklearn.linear_model import LogisticRegression
-from sklearn.svm import SVC 
-from catboost import CatBoostClassifier
-import xgboost as xgb
-from xgboost import XGBClassifier
-#for balancing dataset
-from imblearn.over_sampling import SMOTE
-from imblearn.pipeline import Pipeline as imbpipeline
-#for feature selection
-from sklearn.feature_selection import mutual_info_classif,SelectKBest
-#Crossvalidation for hyper parameter tuning
-from sklearn.model_selection import GridSearchCV
 
 
 st.set_page_config(
@@ -33,22 +14,25 @@ st.set_page_config(
 
 st.cache_resource(show_spinner="Models Loading")
 def load_catboost_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_catboost_pred.joblib")
+    pipeline = joblib.load('./models/CatBoost.joblib')#("./models/tuned/best_catboost_pred.joblib")
     return pipeline
+
 
 st.cache_resource(show_spinner="Models Loading")
 def load_logistic_regressor_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_search_pred.joblib")
+    pipeline = joblib.load('./models/Logistic_Regressor.joblib')#("./models/tuned/best_search_pred.joblib")
     return pipeline
+
 
 st.cache_resource(show_spinner="Models Loading")
 def load_svc_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_svc_pred.joblib")
+    pipeline = joblib.load('./models/SVM.joblib')#("./models/tuned/best_svc_pred.joblib")
     return pipeline
+
 
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_gs_pred .joblib")
+    pipeline = joblib.load('./models/Xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
     return pipeline
 
 
@@ -70,15 +54,15 @@ def select_model():
              pipeline = load_svc_pipeline()
 
         #ENCODER///////////////////////////
-
-        return pipeline
+        encoder = joblib.load('./models/encoder.joblib')
+        return pipeline,encoder
 
 if 'prediction' not in st.session_state:
      st.session_state['prediction']= None
 if 'probability' not in st.session_state:
      st.session_state['probability']= None
 
-def make_prediction(pipeline):
+def make_prediction(pipeline,encoder):
      seniorcitizen = st.session_state['seniorcitizen']
      partner = st.session_state['partner']
      gender  = st.session_state['gender']
@@ -99,9 +83,10 @@ def make_prediction(pipeline):
      totalcharges = st.session_state['totalcharges']
      paymentmethod = st.session_state['paymentmethod']
 
-     columns =['seniorcitizen','partner','gender','dependents','phoneservice','multiplelines',
+     columns = ['seniorcitizen','partner','gender','dependents','phoneservice','multiplelines',
               'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
               'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure','totalcharges']
+     
      data = [[seniorcitizen,partner,gender,dependents,phoneservice,multiplelines,
               internetservice,onlinesecurity,onlinebackup,deviceprotetion,
               techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure,totalcharges]]
@@ -116,8 +101,8 @@ def make_prediction(pipeline):
      #Make prediction
      print((pipeline))
      pred = pipeline.predict(df)
-     prediction = int(pred[0])
-     ##prediction = encoder.inverse_transform([pred])
+     pred= int(pred[0])
+     prediction = encoder.inverse_transform([pred])
 
      #Get probability
      probability = pipeline.predict_proba(pred)
@@ -127,8 +112,10 @@ def make_prediction(pipeline):
      st.session_state['probability'] = probability
 
      return prediction,probability
+
+
 def display_form():
-     pipeline = select_model()
+     pipeline,encoder = select_model()
 
      with st.form('input-feaatures'):
           col1,col2 = st.columns(2)
@@ -160,10 +147,8 @@ def display_form():
                st.number_input('Enter Tenure in months', key = 'tenure', min_value=0, max_value=72, step=1)
                st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
 
-            
 
-
-          st.form_submit_button('Predict',on_click = make_prediction,kwargs = dict(pipeline = pipeline))
+          st.form_submit_button('Predict',on_click = make_prediction,kwargs = dict(pipeline = pipeline,encoder=encoder))
 
 
 if __name__ == '__main__':
