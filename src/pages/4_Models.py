@@ -15,27 +15,29 @@ st.set_page_config(
 #Loading the models into streamlit app
 st.cache_resource(show_spinner="Models Loading")
 def load_catboost_pipeline():
-    pipeline = joblib.load('./models/CatBoost.joblib')#("./models/tuned/best_catboost_pred.joblib")
-    print(pipeline)
+    pipeline = joblib.load("models\\tuned\\best_gs_pred .joblib")
+    st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_logistic_regressor_pipeline():
     pipeline = joblib.load('./models/Logistic_Regressor.joblib')#("./models/tuned/best_search_pred.joblib")
+    st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_svc_pipeline():
     pipeline = joblib.load('./models/SVM.joblib')#("./models/tuned/best_svc_pred.joblib")
+    st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
     pipeline = joblib.load('./models/Xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
-    print(pipeline)
+    st.write(pipeline)
     return pipeline
 
 #Selecting model for prediction
@@ -48,10 +50,10 @@ def select_model():
         if st.session_state['selected_model'] == 'CatBoost':
              pipeline = load_catboost_pipeline()
         
-        if st.session_state['selected_model'] == 'Logistic Regressor':
+        elif st.session_state['selected_model'] == 'Logistic Regressor':
              pipeline = load_logistic_regressor_pipeline()
 
-        if st.session_state['selected_model'] == 'XGBoost':
+        elif st.session_state['selected_model'] == 'XGBoost':
              pipeline = load_xgboost_pipeline()
         else:
              pipeline = load_svc_pipeline()
@@ -94,14 +96,14 @@ def make_prediction(pipeline,encoder):
               'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
               'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure']
      
-     data = [[SeniorCitizen,partner,dependents,phoneservice,multiplelines,
+     data = [[SeniorCitizen,Partner,Dependents,Phoneservice,MultipleLines,
               InternetService,onlinesecurity,onlinebackup,deviceprotetion,
               techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure]]
      #create dataframe
      df = pd.DataFrame(data,columns=columns)
 
-     df['PredictionTime'] = datetime.date.today()
-     df['Model_used'] = st.session_state['selected_model']
+     #df['PredictionTime'] = datetime.date.today()
+     #df['Model_used'] = st.session_state['selected_model']
 
      df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
 
@@ -130,7 +132,7 @@ def display_form():
           with col1:
                st.write ('### Personal Information')
                st.selectbox('Senior Citizen',['Yes','No'],key='SeniorCitizen')
-               #st.selectbox('Gender',['Male','Female'],key='gender')
+               st.selectbox('Gender',['Male','Female'],key='gender')
                st.selectbox('Dependents',['Yes','No'],key='Dependents')
                st.selectbox('Partner',['Yes','No'],key='Partner')
                st.selectbox('Phone Service',['Yes','No'],key='PhoneService')
