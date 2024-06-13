@@ -14,22 +14,25 @@ st.set_page_config(
 
 st.cache_resource(show_spinner="Models Loading")
 def load_catboost_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_catboost_pred.joblib")
+    pipeline = joblib.load('./models/CatBoost.joblib')#("./models/tuned/best_catboost_pred.joblib")
     return pipeline
+
 
 st.cache_resource(show_spinner="Models Loading")
 def load_logistic_regressor_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_search_pred.joblib")
+    pipeline = joblib.load('./models/Logistic_Regressor.joblib')#("./models/tuned/best_search_pred.joblib")
     return pipeline
+
 
 st.cache_resource(show_spinner="Models Loading")
 def load_svc_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_svc_pred.joblib")
+    pipeline = joblib.load('./models/SVM.joblib')#("./models/tuned/best_svc_pred.joblib")
     return pipeline
+
 
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
-    pipeline = joblib.load(".\\models\\tuned\\best_gs_pred.joblib")
+    pipeline = joblib.load('./models/Xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
     return pipeline
 
 
@@ -51,76 +54,74 @@ def select_model():
              pipeline = load_svc_pipeline()
 
         #ENCODER///////////////////////////
-
-        return pipeline
-
+        encoder = joblib.load('./models/encoder.joblib')
+        return pipeline,encoder
 
 if 'prediction' not in st.session_state:
      st.session_state['prediction']= None
 if 'probability' not in st.session_state:
      st.session_state['probability']= None
 
+def make_prediction(pipeline,encoder):
+     seniorcitizen = st.session_state['seniorcitizen']
+     partner = st.session_state['partner']
+     gender  = st.session_state['gender']
+     dependents = st.session_state['dependents']
+     phoneservice = st.session_state['phoneservice']
+     multiplelines = st.session_state['multiplelines']
+     internetservice = st.session_state['internetservice']
+     onlinesecurity = st.session_state['onlinesecurity']
+     onlinebackup = st.session_state['onlinebackup']
+     deviceprotetion = st.session_state['deviceprotection']
+     techsupport = st.session_state['techsupport']
+     streamingtv = st.session_state['streamingtv']
+     streamingmovies = st.session_state['streamingmovies']
+     contract = st.session_state['contract']
+     paperlessbilling = st.session_state['paperlessbilling']
+     tenure = st.session_state['tenure']
+     monthlycharges = st.session_state['monthlycharges']
+     totalcharges = st.session_state['totalcharges']
+     paymentmethod = st.session_state['paymentmethod']
 
-def make_prediction(pipeline):
+     columns = ['seniorcitizen','partner','gender','dependents','phoneservice','multiplelines',
+              'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
+              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure','totalcharges']
+     
+     data = [[seniorcitizen,partner,gender,dependents,phoneservice,multiplelines,
+              internetservice,onlinesecurity,onlinebackup,deviceprotetion,
+              techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure,totalcharges]]
+     #create dataframe
+     df = pd.DataFrame(data,columns=columns)
 
-    seniorcitizen = st.session_state['seniorcitizen']
-    partner = st.session_state['partner']
-    dependents = st.session_state['dependents']
-    phoneservice = st.session_state['phoneservice']
-    multiplelines = st.session_state['multiplelines']
-    internetservice = st.session_state['internetservice']
-    onlinesecurity = st.session_state['onlinesecurity']
-    onlinebackup = st.session_state['onlinebackup']
-    deviceprotetion = st.session_state['deviceprotection']
-    techsupport = st.session_state['techsupport']
-    streamingtv = st.session_state['streamingtv']
-    streamingmovies = st.session_state['streamingmovies']
-    contract = st.session_state['contract']
-    paperlessbilling = st.session_state['paperlessbilling']
-    tenure = st.session_state['tenure']
-    monthlycharges = st.session_state['monthlycharges']
-    totalcharges = st.session_state['totalcharges']
+     df['PredictionTime'] = datetime.date.today()
+     df['Model_used'] = st.session_state['selected_model']
 
-    columns =['seniorcitizen','partner','dependents','phoneservice','multiplelines',
-            'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
-            'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','monthlycharges','tenure','totalcharges']
-    data = [[seniorcitizen,partner,dependents,phoneservice,multiplelines,
-            internetservice,onlinesecurity,onlinebackup,deviceprotetion,
-            techsupport,streamingtv,streamingmovies,contract,paperlessbilling,monthlycharges,tenure,totalcharges]]
-    #create dataframe
-    df = pd.DataFrame(data,columns=columns)
-
-    df['PredictionTime'] = datetime.date.today()
-    df['Model_used'] = st.session_state['selected_model']
-
-    df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
+     df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
 
      #Make prediction
-
-    print((pipeline))
-    pred = pipeline.predict(df)
-    prediction = int(pred[0])
-    prediction = encoder.inverse_transform([pred])
+     print((pipeline))
+     pred = pipeline.predict(df)
+     pred= int(pred[0])
+     prediction = encoder.inverse_transform([pred])
 
      #Get probability
-    probability = pipeline.predict_proba(pred)
+     probability = pipeline.predict_proba(pred)
 
      #Updating state
-    st.session_state['prediction'] = pred
-    st.session_state['probability'] = probability
+     st.session_state['prediction'] = prediction
+     st.session_state['probability'] = probability
 
-    return pred,probability
-
+     return prediction,probability
 
 
 def display_form():
-     pipeline = select_model()
+     pipeline,encoder = select_model()
 
      with st.form('input-feaatures'):
           col1,col2 = st.columns(2)
 
           with col1:
-               st.write ('### Information 1')
+               st.write ('### Personal Information')
                st.selectbox('Senior Citizen',['Yes','No'],key='seniorcitizen')
                st.selectbox('Gender',['Male','Female'],key='gender')
                st.selectbox('Dependents',['Yes','No'],key='dependents')
@@ -131,7 +132,7 @@ def display_form():
 
 
           with col2:
-               st.write('### Information 2')
+               st.write('### Work Information')
                st.selectbox('Online Security',['Yes','No'],key='onlinesecurity')
                st.selectbox('Online Backup',['Yes','No'],key='onlinebackup')
                st.selectbox('Device Protection',['Yes','No'],key='deviceprotection')
@@ -147,23 +148,12 @@ def display_form():
                st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
 
 
-
-
-          st.form_submit_button('Predict', on_click=make_prediction, kwargs=dict(pipeline=pipeline))
-
-
-def load_catboost_pipeline():
-    pipeline = joblib.load("./models/CatBoost.joblib")
-    return pipeline
-cat_boost = load_catboost_pipeline()
-print(cat_boost)
+          st.form_submit_button('Predict',on_click = make_prediction,kwargs = dict(pipeline = pipeline,encoder=encoder))
 
 
 if __name__ == '__main__':
      st.title("Make a Prediction")
      display_form()
      st.write(st.session_state)
-###
 
-     prediction = st.session_state['prediction']
-     probability = st.session_state['probability']
+     
