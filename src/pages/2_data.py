@@ -135,3 +135,5 @@ if __name__ == "__main__":
 #min_val, max_val = st.slider('Select range of values', min(com_df[column]), max(com_df[column]), (min(com_df[column]), max(com_df[column])))
 # filtered_df = com_df[(com_df[column] >= min_val) & (df[column] <= max_val)]
 # st.dataframe(filtered_df)
+
+#streamlit run "c:/Users/chrap/OneDrive - ECG Ghana/Emmanuel Chrappah/Azubi Africa/git_hub_repos/streamlit_fundamentals/src/pages/2_data.py"  
