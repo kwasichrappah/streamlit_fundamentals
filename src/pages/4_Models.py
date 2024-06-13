@@ -163,7 +163,7 @@ if __name__ == '__main__':
      st.title("Make a Prediction")
      display_form()
      st.write(st.session_state)
-
+###
 
      prediction = st.session_state['prediction']
      probability = st.session_state['probability']
