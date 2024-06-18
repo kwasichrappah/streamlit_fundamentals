@@ -1,6 +1,13 @@
 import streamlit as st
 import time
 
+# Set page config
+st.set_page_config(
+    page_title="Dashboarding",
+    page_icon="📈",
+    layout="wide",
+)
+
 st.write("Hello,This is my first web app for a ML model")
 st.title ("Customer Churn Predictor")
 st.markdown("Page 2: Dashboards")
