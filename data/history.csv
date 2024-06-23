@@ -1,0 +1,15 @@
+SeniorCitizen,Partner,Dependents,PhoneService,MultipleLines,InternetService,OnlineSecurity,OnlineBackup,DeviceProtection,TechSupport,StreamingTV,StreamingMovies,Contract,PaperlessBilling,PaymentMethod,MonthlyCharges,tenure,PredictionTime,Model_used,prediction
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,One year,Yes,Bank transfer,10,2,2024-06-13,CatBoost,
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Two year,Yes,Bank transfer,10,2,2024-06-13,SVC,0
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Two year,Yes,Bank transfer,25,20,2024-06-13,SVC,0
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2,2024-06-13,CatBoost,
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,6,2024-06-13,CatBoost,0
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Electronic Check,10,2,2024-06-18,CatBoost,
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,Yes,Yes,Yes,Yes,Month-to-month,Yes,Bank transfer,11,2,2024-06-18,CatBoost,0
+Yes,Yes,Yes,Yes,Yes,Fiber Optic,Yes,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Bank transfer,11,2,2024-06-18,CatBoost,0
+No,Yes,Yes,Yes,Yes,DSL,Yes,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Bank transfer,11,2,2024-06-18,CatBoost,0
+No,Yes,Yes,Yes,Yes,DSL,Yes,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Bank transfer,11,2,2024-06-18,CatBoost,0
+No,Yes,Yes,Yes,Yes,DSL,Yes,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Bank transfer,11,2,2024-06-18,CatBoost,0
+No,Yes,Yes,Yes,Yes,DSL,Yes,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Bank transfer,11,2,2024-06-18,CatBoost,0
+No,Yes,Yes,Yes,Yes,DSL,Yes,Yes,No,Yes,Yes,Yes,Month-to-month,Yes,Bank transfer,11,2,2024-06-18,CatBoost,0
+No,Yes,Yes,Yes,No,DSL,Yes,Yes,No,Yes,Yes,Yes,Month-to-month,No,Bank transfer,11,2,2024-06-18,XGBoost,0

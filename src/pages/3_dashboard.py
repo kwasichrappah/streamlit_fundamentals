@@ -3,7 +3,7 @@ import time
 import plotly.express as px
 import pandas as pd
 
-df = pd.read_csv('data\customer_churn_merged.csv')
+
 
 def loader():
 
