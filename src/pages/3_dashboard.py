@@ -3,6 +3,12 @@ import time
 import plotly.express as px
 import pandas as pd
 
+# Set page config
+st.set_page_config(
+    page_title="Dashboard",
+    page_icon="📉",
+    layout="wide",
+)
 
 
 def loader():
