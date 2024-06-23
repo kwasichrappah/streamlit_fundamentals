@@ -1,31 +1,75 @@
 import streamlit as st
 import time
 import plotly.express as px
+import pandas as pd
 
-
+df = pd.read_csv('data\customer_churn_merged.csv')
 
 def loader():
-  'Starting a long computation...'
+
   # Add a placeholder
-  latest_iteration = st.empty()
   bar = st.progress(0)
 
   for i in range(100):
     # Update the progress bar with each iteration.
-    latest_iteration.text(f'Iteration {i+1}')
     bar.progress(i + 1)
     time.sleep(0.1)
 
-  '...and now we\'re done!'
+
 
 
 def eda_dashboard():
-   st.markdown('### Exploratory Data AnalyDashboard')
+   st.markdown('### Exploratory Data Analysis Dashboard')
+   loader()
+   col1,col3 = st.columns(2)
+
+   with col1:
+      int_service_histogram = px.histogram(df,x='InternetService',color = 'Churn')
+
+      st.plotly_chart(int_service_histogram)
+
+   with col3:
+       contract_histogram = px.histogram(df,x='Contract',color = 'Churn')
+
+       st.plotly_chart(contract_histogram)  
+
+   total_scatter = px.scatter(df,y='TotalCharges', color="Churn")
+   st.plotly_chart(total_scatter)  
 
 def kpi_dashboard():
    st.markdown ('### Key Performance Indicators')
+   loader()
+   col1,col2 = st.columns(2)
 
-#st.bar_chart({"data": [1, 5, 2, 6, 2, 1]})
+   with col1:
+      age_contract_histogram = px.histogram(df,x='Contract',y='MonthlyCharges',color = 'SeniorCitizen')
+
+      st.plotly_chart(age_contract_histogram)
+
+   with col2:
+       pass
+       contract_histogram = px.histogram(df,x='Partner',y= 'MonthlyCharges',color = 'MultipleLines')
+
+       st.plotly_chart(contract_histogram)  
+
+
+   col3,col4 = st.columns(2)
+
+   with col3:
+      contract_histogram = px.histogram(df,x='Contract',y='MonthlyCharges',color = 'InternetService')
+
+      st.plotly_chart(contract_histogram)
+
+   with col4:
+       contract_histogram = px.histogram(df,x='OnlineSecurity',y= 'MonthlyCharges',color = 'StreamingTV')
+
+       st.plotly_chart(contract_histogram)  
+
+
+   monthly_scatter = px.funnel(df, x='MonthlyCharges', y='Churn')
+   st.plotly_chart(monthly_scatter)  
+
+
 
 
 if __name__ == '__main__':
