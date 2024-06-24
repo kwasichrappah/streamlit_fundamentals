@@ -110,3 +110,14 @@ add_selectbox = st.sidebar.selectbox(
 
 
 
+
+
+
+
+
+
+
+
+
+
+#streamlit run "c:/Users/chrap/OneDrive - ECG Ghana/Emmanuel Chrappah/Azubi Africa/git_hub_repos/streamlit_fundamentals/src/app.py"     
