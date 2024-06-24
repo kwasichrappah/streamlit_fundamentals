@@ -94,11 +94,11 @@ def make_prediction(pipeline,encoder):
      #totalcharges = st.session_state['totalcharges'] #Not included in my model for prediction
      paymentmethod = st.session_state['PaymentMethod']
 
-     columns = ['seniorcitizen','partner','dependents','phoneservice','multiplelines',
-              'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
-              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure']
+     columns = ['SeniorCitizen','Partner','Dependents','PhoneService','MultipleLines',
+              'InternetService','OnlineSecurity','OnlineBackup','DeviceProtection',
+              'TechSupport','StreamingTV','StreamingMovies','Contract','PaperlessBilling','PaymentMethod','MonthlyCharges','tenure']
      
-     data = [[SeniorCitizen,Partner,Dependents,Phoneservice,MultipleLines,
+     data = [[SeniorCitizen,partner,dependents,phoneservice,multiplelines,
               InternetService,onlinesecurity,onlinebackup,deviceprotetion,
               techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure]]
      #create dataframe
