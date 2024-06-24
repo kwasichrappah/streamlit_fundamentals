@@ -18,28 +18,24 @@ st.set_page_config(
 st.cache_resource(show_spinner="Models Loading")
 def load_catboost_pipeline():
     pipeline = joblib.load("models\\tuned\\catboost_pred.joblib")
-    st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_logistic_regressor_pipeline():
     pipeline = joblib.load('./models/log_reg_pred.joblib')#("./models/tuned/best_search_pred.joblib")
-    st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_svc_pipeline():
     pipeline = joblib.load('./models/svc_pred.joblib')#("./models/tuned/best_svc_pred.joblib")
-    st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
     pipeline = joblib.load('./models/xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
-    st.write(pipeline)
     return pipeline
 
 #Selecting model for prediction
@@ -94,11 +90,11 @@ def make_prediction(pipeline,encoder):
      #totalcharges = st.session_state['totalcharges'] #Not included in my model for prediction
      paymentmethod = st.session_state['PaymentMethod']
 
-     columns = ['seniorcitizen','partner','dependents','phoneservice','multiplelines',
-              'internetservice','onlinesecurity','onlinebackup','deviceprotetion',
-              'techsupport','streamingtv','streamingmovies','contract','paperlessbilling','paymentmethod','monthlycharges','tenure']
+     columns = ['SeniorCitizen','Prtner','Dependents','PhoneService','MultipleLines',
+              'Internetservice','OnlineSecurity','OnlineBackup','DeviceProtetion',
+              'TechSupport','StreamingTV','StreamingMovies','Contract','PaperlessBilling','PaymentMethod','MonthlyCharges','tenure']
      
-     data = [[SeniorCitizen,Partner,Dependents,Phoneservice,MultipleLines,
+     data = [[SeniorCitizen,partner,dependents,phoneservice,multiplelines,
               InternetService,onlinesecurity,onlinebackup,deviceprotetion,
               techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure]]
      #create dataframe
@@ -186,7 +182,7 @@ if st.session_state["authentication_status"]:
    st.write(f'Welcome *{st.session_state["name"]}*')
    st.title("Make a Prediction")
    display_form()
-   st.write(st.session_state)
+   #st.write(st.session_state)
     
 elif st.session_state["authentication_status"] is False:
     st.error('Username/password is incorrect')
