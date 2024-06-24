@@ -5,42 +5,68 @@ import pyodbc
 import joblib
 import sys
 import numpy as np
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
 
+
+# Streamlit page configuration
+st.set_page_config(page_title="Data", page_icon="💾", layout="wide")
+
+
+#Creation of Connection to Database
+
+@st.cache_resource(show_spinner = 'connecting to database...')
+def init_connection():
+    return pyodbc.connect(
+            "DRIVER={SQL Server};SERVER="
+            + st.secrets["server"]
+            + ";DATABASE="
+            + st.secrets["database"]
+            + ";UID="
+            + st.secrets["username"]
+            + ";PWD="
+            + st.secrets["password"]
+            
+    
+    )
+
+
+@st.cache_data(show_spinner = 'running query ...')
+def running_query(query):
+    with connection.cursor() as cursor:
+                            cursor.execute(query)
+                            rows = cursor.fetchall()
+                            df = pd.DataFrame.from_records(rows, columns = [column[0] for column in cursor.description])
+
+    return df
+
+
+with open('config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 
 if __name__ == "__main__":
-    # Streamlit page configuration
-    st.set_page_config(page_title="Data", page_icon="💾", layout="wide")
+
+    
+   authenticator = stauth.Authenticate(
+   config['credentials'],
+   config['cookie']['name'],
+   config['cookie']['key'],
+   config['cookie']['expiry_days'],
+   config['pre-authorized']
+   )
 
 
-    #Creation of Connection to Database
+authenticator.login()
 
-    @st.cache_resource(show_spinner = 'connecting to database...')
-    def init_connection():
-        return pyodbc.connect(
-                "DRIVER={SQL Server};SERVER="
-                + st.secrets["server"]
-                + ";DATABASE="
-                + st.secrets["database"]
-                + ";UID="
-                + st.secrets["username"]
-                + ";PWD="
-                + st.secrets["password"]
-                
-        
-        )
-
+if st.session_state["authentication_status"]:
+    authenticator.logout()
+    st.write(f'Welcome *{st.session_state["name"]}*')
     connection = init_connection()
 
 
 
-    @st.cache_data(show_spinner = 'running query ...')
-    def running_query(query):
-        with connection.cursor() as cursor:
-                                cursor.execute(query)
-                                rows = cursor.fetchall()
-                                df = pd.DataFrame.from_records(rows, columns = [column[0] for column in cursor.description])
 
-        return df
 
     query = "SELECT * FROM LP2_Telco_churn_first_3000"
 
@@ -95,6 +121,21 @@ if __name__ == "__main__":
                 )
     st.caption('Data was gathered from :blue[an SQL database and a CSV file]')
 
+
+    
+elif st.session_state["authentication_status"] is False:
+    st.error('Username/password is incorrect')
+elif st.session_state["authentication_status"] is None:
+    st.warning('Please enter your username and password')
+
+
+
+
+
+
+
+
+    
 
 
 
