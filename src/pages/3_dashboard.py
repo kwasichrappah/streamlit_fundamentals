@@ -137,27 +137,3 @@ add_selectbox = st.sidebar.selectbox(
         
 
 
-
-
-
-
-
-
-
-
-
-
-   
-   # st.title("Dashboard")
-
-   # col1,col2 = st.columns(2)
-   # with col1:
-   #    pass
-   # with col2:
-   #    st.selectbox('Select the type of Dashboard',options=['EDA','KPI'],key='dashboard_type')
-
-   # if st.session_state['dashboard_type'] == 'EDA':
-   #  eda_dashboard()
-
-   # else:
-   #  kpi_dashboard()
