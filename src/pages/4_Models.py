@@ -17,28 +17,28 @@ st.set_page_config(
 #Loading the models into streamlit app
 st.cache_resource(show_spinner="Models Loading")
 def load_catboost_pipeline():
-    pipeline = joblib.load("models\\tuned\\best_gs_pred .joblib")
+    pipeline = joblib.load("models\\tuned\\catboost_pred.joblib")
     st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_logistic_regressor_pipeline():
-    pipeline = joblib.load('./models/Logistic_Regressor.joblib')#("./models/tuned/best_search_pred.joblib")
+    pipeline = joblib.load('./models/log_reg_pred.joblib')#("./models/tuned/best_search_pred.joblib")
     st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_svc_pipeline():
-    pipeline = joblib.load('./models/SVM.joblib')#("./models/tuned/best_svc_pred.joblib")
+    pipeline = joblib.load('./models/svc_pred.joblib')#("./models/tuned/best_svc_pred.joblib")
     st.write(pipeline)
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
-    pipeline = joblib.load('./models/Xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
+    pipeline = joblib.load('./models/xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
     st.write(pipeline)
     return pipeline
 
