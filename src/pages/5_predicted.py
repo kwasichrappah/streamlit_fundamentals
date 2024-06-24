@@ -27,7 +27,7 @@ with open('config.yaml') as file:
    )
 
 
-authenticator.login()
+authenticator.login(location='sidebar')
 
 if st.session_state["authentication_status"]:
    authenticator.logout()

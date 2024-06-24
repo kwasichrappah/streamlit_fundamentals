@@ -177,7 +177,7 @@ if __name__ == '__main__':
    )
 
 
-authenticator.login()
+authenticator.login(location='sidebar')
 
 if st.session_state["authentication_status"]:
    authenticator.logout()
