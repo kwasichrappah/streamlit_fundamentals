@@ -2,6 +2,9 @@ import streamlit as st
 import time
 import plotly.express as px
 import pandas as pd
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
 
 # Set page config
 st.set_page_config(
@@ -75,11 +78,30 @@ def kpi_dashboard():
    monthly_scatter = px.funnel(df, x='MonthlyCharges', y='Churn')
    st.plotly_chart(monthly_scatter)  
 
-
+with open('config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 
 
 if __name__ == '__main__':
+
    
+
+
+
+   authenticator = stauth.Authenticate(
+   config['credentials'],
+   config['cookie']['name'],
+   config['cookie']['key'],
+   config['cookie']['expiry_days'],
+   config['pre-authorized']
+   )
+
+
+authenticator.login()
+
+if st.session_state["authentication_status"]:
+   authenticator.logout()
+   st.write(f'Welcome *{st.session_state["name"]}*')
    st.title("Dashboard")
 
    col1,col2 = st.columns(2)
@@ -93,3 +115,49 @@ if __name__ == '__main__':
 
    else:
     kpi_dashboard()
+
+    
+elif st.session_state["authentication_status"] is False:
+    st.error('Username/password is incorrect')
+elif st.session_state["authentication_status"] is None:
+    st.warning('Please enter your username and password')
+
+
+
+
+
+
+
+
+# Add a selectbox to the sidebar:
+add_selectbox = st.sidebar.selectbox(
+    'How I can be contacted?',
+    ('chrappahkwasi@gmail.com','chrappahkwasi@gmail.com', '0209100603')
+)
+        
+
+
+
+
+
+
+
+
+
+
+
+
+   
+   # st.title("Dashboard")
+
+   # col1,col2 = st.columns(2)
+   # with col1:
+   #    pass
+   # with col2:
+   #    st.selectbox('Select the type of Dashboard',options=['EDA','KPI'],key='dashboard_type')
+
+   # if st.session_state['dashboard_type'] == 'EDA':
+   #  eda_dashboard()
+
+   # else:
+   #  kpi_dashboard()
