@@ -95,7 +95,11 @@ def make_prediction(pipeline,encoder):
      paymentmethod = st.session_state['PaymentMethod']
 
      columns = ['SeniorCitizen','Partner','Dependents','PhoneService','MultipleLines',
+<<<<<<< Updated upstream
               'InternetService','OnlineSecurity','OnlineBackup','DeviceProtection',
+=======
+              'InternetService','OnlineSecurity','OnlineBackup','DeviceProtetion',
+>>>>>>> Stashed changes
               'TechSupport','StreamingTV','StreamingMovies','Contract','PaperlessBilling','PaymentMethod','MonthlyCharges','tenure']
      
      data = [[SeniorCitizen,partner,dependents,phoneservice,multiplelines,
