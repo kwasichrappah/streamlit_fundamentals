@@ -32,7 +32,7 @@ authenticator.login(location='sidebar')
 if st.session_state["authentication_status"]:
    authenticator.logout()
    st.write(f'Welcome *{st.session_state["name"]}*')
-   df=pd.read_csv('data\history.csv')
+   df=pd.read_csv('./data/history.csv')
 
    result = st.data_editor(df,num_rows='dynamic')
    

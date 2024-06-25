@@ -17,7 +17,7 @@ st.set_page_config(
 #Loading the models into streamlit app
 st.cache_resource(show_spinner="Models Loading")
 def load_catboost_pipeline():
-    pipeline = joblib.load("models\\tuned\\catboost_pred.joblib")
+    pipeline = joblib.load("./models/tuned/catboost_pred.joblib")
     return pipeline
 
 
