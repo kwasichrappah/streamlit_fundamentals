@@ -110,17 +110,22 @@ def make_prediction(pipeline,encoder):
      #Make prediction
      
      pred = pipeline.predict(df)
-     pred = int(pred[0])
-     prediction = encoder.inverse_transform(pred)
+     prediction = int(pred[0])
+
+
+     #prediction = encoder.inverse_transform(pred)
 
      #Get probability
      #probability = pipeline.predict_proba(pred)
 
      #Updating state
-     st.session_state['prediction'] = pred
+     if  prediction == 1:
+        st.session_state['prediction']='Yes'
+     else:
+          st.session_state['prediction'] ='No'
      #st.session_state['probability'] = probability
 
-     return prediction#,probability
+     return st.session_state['prediction']#,probability
 
 #Display form on the streamlit app to take user
 def display_form():
@@ -184,7 +189,11 @@ if st.session_state["authentication_status"]:
    st.write(f'Welcome *{st.session_state["name"]}*')
    st.title("Make a Prediction")
    display_form()
-   #st.write(st.session_state)
+
+   st.write(st.session_state['prediction'])
+
+
+
     
 elif st.session_state["authentication_status"] is False:
     st.error('Username/password is incorrect')
