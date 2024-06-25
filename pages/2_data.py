@@ -14,32 +14,32 @@ from yaml.loader import SafeLoader
 st.set_page_config(page_title="Data", page_icon="💾", layout="wide")
 
 
-#Creation of Connection to Database
+# #Creation of Connection to Database
 
-@st.cache_resource(show_spinner = 'connecting to database...')
-def init_connection():
-    return pyodbc.connect(
-            "DRIVER={SQL Server};SERVER="
-            + st.secrets["server"]
-            + ";DATABASE="
-            + st.secrets["database"]
-            + ";UID="
-            + st.secrets["username"]
-            + ";PWD="
-            + st.secrets["password"]
+# @st.cache_resource(show_spinner = 'connecting to database...')
+# def init_connection():
+#     return pyodbc.connect(
+#             "DRIVER={SQL Server};SERVER="
+#             + st.secrets["server"]
+#             + ";DATABASE="
+#             + st.secrets["database"]
+#             + ";UID="
+#             + st.secrets["username"]
+#             + ";PWD="
+#             + st.secrets["password"]
             
     
-    )
+#     )
 
 
-@st.cache_data(show_spinner = 'running query ...')
-def running_query(query):
-    with connection.cursor() as cursor:
-                            cursor.execute(query)
-                            rows = cursor.fetchall()
-                            df = pd.DataFrame.from_records(rows, columns = [column[0] for column in cursor.description])
+# @st.cache_data(show_spinner = 'running query ...')
+# def running_query(query):
+#     with connection.cursor() as cursor:
+#                             cursor.execute(query)
+#                             rows = cursor.fetchall()
+#                             df = pd.DataFrame.from_records(rows, columns = [column[0] for column in cursor.description])
 
-    return df
+#     return df
 
 
 with open('config.yaml') as file:
@@ -62,38 +62,40 @@ authenticator.login(location='sidebar')
 if st.session_state["authentication_status"]:
     authenticator.logout(location = 'sidebar')
     st.write(f'Welcome *{st.session_state["name"]}*')
-    connection = init_connection()
+    #connection = init_connection()
 
 
 
 
 
-    query = "SELECT * FROM LP2_Telco_churn_first_3000"
+    # query = "SELECT * FROM LP2_Telco_churn_first_3000"
 
-    rows = running_query(query)
+    # rows = running_query(query)
 
-    csv_df = pd.read_csv("C:\\Users\\chrap\\OneDrive - ECG Ghana\\Emmanuel Chrappah\\Azubi Africa\\git_hub_repos\\Custormer-Churn\\data\\LP2_Telco-churn-second-2000.csv")
-    com_df=pd.concat([rows,csv_df],ignore_index=True)
+    # csv_df = pd.read_csv("C:\\Users\\chrap\\OneDrive - ECG Ghana\\Emmanuel Chrappah\\Azubi Africa\\git_hub_repos\\Custormer-Churn\\data\\LP2_Telco-churn-second-2000.csv")
+    # com_df=pd.concat([rows,csv_df],ignore_index=True)
 
-    # Load the function from the file
-    com_df['TotalCharges'] = pd.to_numeric(com_df['TotalCharges'], errors='coerce')
-    com_df=com_df.reset_index()
-        #Dropping the index column
-    com_df = com_df.drop(['index'], axis = 1 )
-    com_df.replace(['No','No internet service','false','No phone service'], "False", inplace = True)
+    # # Load the function from the file
+    # com_df['TotalCharges'] = pd.to_numeric(com_df['TotalCharges'], errors='coerce')
+    # com_df=com_df.reset_index()
+    #     #Dropping the index column
+    # com_df = com_df.drop(['index'], axis = 1 )
+    # com_df.replace(['No','No internet service','false','No phone service'], "False", inplace = True)
 
-    com_df.replace('Yes',"True", inplace = True)
-    com_df['SeniorCitizen'] = np.where(com_df['SeniorCitizen'] == 1, True, False)
-    com_df['InternetService']=com_df.InternetService.replace('false','None')
-    com_df.replace(['No','No internet service','false','No phone service'], "False", inplace = True)
-    com_df.replace('Yes',"True", inplace = True)
-    com_df['SeniorCitizen'] = np.where(com_df['SeniorCitizen'] == 1, True, False)
-    com_df.InternetService.replace('false','None')
-    com_df.replace({'True': True, 'False': False}, inplace = True)
+    # com_df.replace('Yes',"True", inplace = True)
+    # com_df['SeniorCitizen'] = np.where(com_df['SeniorCitizen'] == 1, True, False)
+    # com_df['InternetService']=com_df.InternetService.replace('false','None')
+    # com_df.replace(['No','No internet service','false','No phone service'], "False", inplace = True)
+    # com_df.replace('Yes',"True", inplace = True)
+    # com_df['SeniorCitizen'] = np.where(com_df['SeniorCitizen'] == 1, True, False)
+    # com_df.InternetService.replace('false','None')
+    # com_df.replace({'True': True, 'False': False}, inplace = True)
 
 
 
     st.header("Collection of data from AirTigo Telecommunications")
+
+    com_df= pd.read_csv("./data/customer_churn_merged.csv")
 
     col1, col2 = st.columns(2)
     with col2:
