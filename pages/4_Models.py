@@ -23,19 +23,19 @@ def load_catboost_pipeline():
 
 st.cache_resource(show_spinner="Models Loading")
 def load_logistic_regressor_pipeline():
-    pipeline = joblib.load('./models/log_reg_pred.joblib')#("./models/tuned/best_search_pred.joblib")
+    pipeline = joblib.load('./models/log_reg_pred.joblib')
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_svc_pipeline():
-    pipeline = joblib.load('./models/svc_pred.joblib')#("./models/tuned/best_svc_pred.joblib")
+    pipeline = joblib.load('./models/svc_pred.joblib')
     return pipeline
 
 
 st.cache_resource(show_spinner="Models Loading")
 def load_xgboost_pipeline():
-    pipeline = joblib.load('./models/xgboost.joblib')#("./models/tuned/best_gs_pred .joblib")
+    pipeline = joblib.load('./models/xgboost.joblib')
     return pipeline
 
 #Selecting model for prediction
@@ -72,7 +72,6 @@ if 'probability' not in st.session_state:
 def make_prediction(pipeline,encoder):
      SeniorCitizen = st.session_state['SeniorCitizen']
      partner = st.session_state['Partner']
-     #gender  = st.session_state['gender'] Not included in my model for prediction
      dependents = st.session_state['Dependents']
      phoneservice = st.session_state['PhoneService']
      multiplelines = st.session_state['MultipleLines']
@@ -87,7 +86,6 @@ def make_prediction(pipeline,encoder):
      paperlessbilling = st.session_state['PaperlessBilling']
      tenure = st.session_state['tenure']
      monthlycharges = st.session_state['MonthlyCharges']
-     #totalcharges = st.session_state['totalcharges'] #Not included in my model for prediction
      paymentmethod = st.session_state['PaymentMethod']
 
      columns = ['SeniorCitizen','Partner','Dependents','PhoneService','MultipleLines',
@@ -99,11 +97,11 @@ def make_prediction(pipeline,encoder):
      data = [[SeniorCitizen,partner,dependents,phoneservice,multiplelines,
               InternetService,onlinesecurity,onlinebackup,deviceprotetion,
               techsupport,streamingtv,streamingmovies,contract,paperlessbilling,paymentmethod,monthlycharges,tenure]]
+     
      #create dataframe
      df = pd.DataFrame(data,columns=columns)
 
-     #df['PredictionTime'] = datetime.date.today()
-     #df['Model_used'] = st.session_state['selected_model']
+
 
      df.to_csv('.\\data\\history.csv',mode='a',header = not os.path.exists('.\\data\\history.csv'),index=False)
 
@@ -113,19 +111,14 @@ def make_prediction(pipeline,encoder):
      prediction = int(pred[0])
 
 
-     #prediction = encoder.inverse_transform(pred)
-
-     #Get probability
-     #probability = pipeline.predict_proba(pred)
-
      #Updating state
      if  prediction == 1:
         st.session_state['prediction']='Yes'
      else:
           st.session_state['prediction'] ='No'
-     #st.session_state['probability'] = probability
+     
 
-     return st.session_state['prediction']#,probability
+     return st.session_state['prediction']
 
 #Display form on the streamlit app to take user
 def display_form():
@@ -159,7 +152,7 @@ def display_form():
                             ,key='PaymentMethod')
                st.number_input('Enter your monthly charge', key='MonthlyCharges', min_value=10, max_value=200, step=1)
                st.number_input('Enter Tenure in months', key = 'tenure', min_value=2, max_value=72, step=1)
-               #st.number_input('Enter your totalcharge', key = 'totalcharges', min_value=10, max_value=1000, step=1)
+               
 
 
           st.form_submit_button('Predict',on_click = make_prediction,kwargs = dict(pipeline = pipeline,encoder=encoder))
@@ -201,4 +194,8 @@ elif st.session_state["authentication_status"] is None:
     st.warning('Please enter your username and password')
 
 
-     
+# Add a selectbox to the sidebar:
+add_selectbox = st.sidebar.selectbox(
+    'How I can be contacted?',
+    ('chrappahkwasi@gmail.com','chrappahkwasi@gmail.com', '0209100603')
+)

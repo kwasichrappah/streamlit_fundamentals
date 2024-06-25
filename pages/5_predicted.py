@@ -43,3 +43,8 @@ elif st.session_state["authentication_status"] is None:
     st.warning('Please enter your username and password')    
 
 
+# Add a selectbox to the sidebar:
+add_selectbox = st.sidebar.selectbox(
+    'How I can be contacted?',
+    ('chrappahkwasi@gmail.com','chrappahkwasi@gmail.com', '0209100603')
+)
