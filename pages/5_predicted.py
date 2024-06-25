@@ -30,7 +30,7 @@ with open('config.yaml') as file:
 authenticator.login(location='sidebar')
 
 if st.session_state["authentication_status"]:
-   authenticator.logout()
+   authenticator.logout(location = 'sidebar')
    st.write(f'Welcome *{st.session_state["name"]}*')
    df=pd.read_csv('./data/history.csv')
 

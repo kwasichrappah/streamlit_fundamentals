@@ -60,7 +60,7 @@ if __name__ == "__main__":
 authenticator.login(location='sidebar')
 
 if st.session_state["authentication_status"]:
-    authenticator.logout()
+    authenticator.logout(location = 'sidebar')
     st.write(f'Welcome *{st.session_state["name"]}*')
     connection = init_connection()
 
