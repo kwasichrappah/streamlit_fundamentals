@@ -3,24 +3,43 @@ import pandas as pd
 import joblib
 import os
 import datetime
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
+
 
 st.set_page_config(
     page_title= "Predict Page",
-    page_icon=" ",
+    page_icon="🗂️",
     layout='wide'
 )
-df=pd.read_csv('data\history.csv')
+
+with open('config.yaml') as file:
+   config = yaml.load(file, Loader=SafeLoader)
 
 
-# df = pd.DataFrame(columns=['name','age','color'])
-# colors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet']
-# config = {
-#     'name' : st.column_config.TextColumn('Full Name (required)', width='large', required=True),
-#     'age' : st.column_config.NumberColumn('Age (years)', min_value=0, max_value=122),
-#     'color' : st.column_config.SelectboxColumn('Favorite Color', options=colors)
-# }
+   authenticator = stauth.Authenticate(
+   config['credentials'],
+   config['cookie']['name'],
+   config['cookie']['key'],
+   config['cookie']['expiry_days'],
+   config['pre-authorized']
+   )
 
-result = st.data_editor(df,num_rows='dynamic')# column_config = config, 
 
-# if st.button('Get results'):
-#     st.write(result)
+authenticator.login(location='sidebar')
+
+if st.session_state["authentication_status"]:
+   authenticator.logout()
+   st.write(f'Welcome *{st.session_state["name"]}*')
+   df=pd.read_csv('data\history.csv')
+
+   result = st.data_editor(df,num_rows='dynamic')
+   
+    
+elif st.session_state["authentication_status"] is False:
+    st.error('Username/password is incorrect')
+elif st.session_state["authentication_status"] is None:
+    st.warning('Please enter your username and password')    
+
+

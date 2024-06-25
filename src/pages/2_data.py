@@ -5,42 +5,68 @@ import pyodbc
 import joblib
 import sys
 import numpy as np
+import streamlit_authenticator as stauth
+import yaml
+from yaml.loader import SafeLoader
 
+
+# Streamlit page configuration
+st.set_page_config(page_title="Data", page_icon="💾", layout="wide")
+
+
+#Creation of Connection to Database
+
+@st.cache_resource(show_spinner = 'connecting to database...')
+def init_connection():
+    return pyodbc.connect(
+            "DRIVER={SQL Server};SERVER="
+            + st.secrets["server"]
+            + ";DATABASE="
+            + st.secrets["database"]
+            + ";UID="
+            + st.secrets["username"]
+            + ";PWD="
+            + st.secrets["password"]
+            
+    
+    )
+
+
+@st.cache_data(show_spinner = 'running query ...')
+def running_query(query):
+    with connection.cursor() as cursor:
+                            cursor.execute(query)
+                            rows = cursor.fetchall()
+                            df = pd.DataFrame.from_records(rows, columns = [column[0] for column in cursor.description])
+
+    return df
+
+
+with open('config.yaml') as file:
+    config = yaml.load(file, Loader=SafeLoader)
 
 if __name__ == "__main__":
-    # Streamlit page configuration
-    st.set_page_config(page_title="Data", page_icon="💾", layout="wide")
+
+    
+   authenticator = stauth.Authenticate(
+   config['credentials'],
+   config['cookie']['name'],
+   config['cookie']['key'],
+   config['cookie']['expiry_days'],
+   config['pre-authorized']
+   )
 
 
-    #Creation of Connection to Database
+authenticator.login(location='sidebar')
 
-    @st.cache_resource(show_spinner = 'connecting to database...')
-    def init_connection():
-        return pyodbc.connect(
-                "DRIVER={SQL Server};SERVER="
-                + st.secrets["server"]
-                + ";DATABASE="
-                + st.secrets["database"]
-                + ";UID="
-                + st.secrets["username"]
-                + ";PWD="
-                + st.secrets["password"]
-                
-        
-        )
-
+if st.session_state["authentication_status"]:
+    authenticator.logout()
+    st.write(f'Welcome *{st.session_state["name"]}*')
     connection = init_connection()
 
 
 
-    @st.cache_data(show_spinner = 'running query ...')
-    def running_query(query):
-        with connection.cursor() as cursor:
-                                cursor.execute(query)
-                                rows = cursor.fetchall()
-                                df = pd.DataFrame.from_records(rows, columns = [column[0] for column in cursor.description])
 
-        return df
 
     query = "SELECT * FROM LP2_Telco_churn_first_3000"
 
@@ -96,44 +122,8 @@ if __name__ == "__main__":
     st.caption('Data was gathered from :blue[an SQL database and a CSV file]')
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-# categoricals = [column for column in com_df.columns if com_df[column].dtype == "O"]
-
-# #column = st.selectbox('Select feature to filter on', categoricals)
-# #city_filter = st.selectbox('Select city', options=['All'] + com_df.columns.tolist())
-# columns_filter = st.multiselect('Select feature to filter on#', options=categoricals)
-
-# # Select specific column to display
-# filtered_df = com_df[[columns_filter]]
-
-
-# st.dataframe(filtered_df.style.background_gradient(cmap='Blues'), height=300)
-
-
-#min_val, max_val = st.slider('Select range of values', min(com_df[column]), max(com_df[column]), (min(com_df[column]), max(com_df[column])))
-# filtered_df = com_df[(com_df[column] >= min_val) & (df[column] <= max_val)]
-# st.dataframe(filtered_df)
-
-#streamlit run "c:/Users/chrap/OneDrive - ECG Ghana/Emmanuel Chrappah/Azubi Africa/git_hub_repos/streamlit_fundamentals/src/pages/2_data.py"  
+    
+elif st.session_state["authentication_status"] is False:
+    st.error('Username/password is incorrect')
+elif st.session_state["authentication_status"] is None:
+    st.warning('Please enter your username and password')
