@@ -1,3 +1,4 @@
 
 *.env
 src/pages/new.py
+config.yaml
