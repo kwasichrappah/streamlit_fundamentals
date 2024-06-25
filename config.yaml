@@ -1,7 +1,7 @@
 credentials:
   usernames:
     echrappah:
-      email: emmanuel.chrappah@azubiafrica.org
+      email: emmanuel.chrappah@gmail.com
       failed_login_attempts: 0 # Will be managed automatically
       logged_in: False # Will be managed automatically
       name: Emmanuel Chrappah
@@ -24,4 +24,4 @@ cookie:
   name: some_cookie_name
 pre-authorized:
   emails:
-  - emmanuel.chrappah@azubiafrica.org
+  - emmanuel.chrappah@gmail.com
