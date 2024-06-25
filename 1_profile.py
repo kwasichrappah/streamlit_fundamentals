@@ -32,7 +32,7 @@ if st.session_state["authentication_status"]:
     authenticator.logout()
     st.write(f'Welcome *{st.session_state["name"]}*')
     st.title ("Customer Churn Predictor WebApp")
-    st.write("This is a ML model aoolication that predicts whether a customer will curn or not.")
+    st.write("This is a ML model application that predicts whether a customer will curn or not.")
     st.write("It uses ML algorithms to make these predictions.")
     tab1, tab2, tab3 = st.tabs(["Problem Statement","Key Features", "Key Metrics and Success Criteria"])
 
