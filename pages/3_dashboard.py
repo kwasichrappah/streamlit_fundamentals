@@ -24,7 +24,7 @@ def loader():
     bar.progress(i + 1)
     time.sleep(0.1)
 
-df= pd.read_csv("data\customer_churn_merged.csv")
+df= pd.read_csv("./data/customer_churn_merged.csv")
 
 
 def eda_dashboard():
