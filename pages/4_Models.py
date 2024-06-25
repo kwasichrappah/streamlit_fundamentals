@@ -10,7 +10,7 @@ from yaml.loader import SafeLoader
 #setting page title and icon
 st.set_page_config(
     page_title = "Prediction Page",
-    page_icon = " ",
+    page_icon = "🎯",
     layout = 'wide'
 )
 
