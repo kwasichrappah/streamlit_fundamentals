@@ -64,8 +64,7 @@ def select_model():
 #Prediction and probability variables state at the start of the webapp
 if 'prediction' not in st.session_state:
      st.session_state['prediction'] = None
-if 'probability' not in st.session_state:
-     st.session_state['probability'] = None
+
 
 
 #Making prediction 
